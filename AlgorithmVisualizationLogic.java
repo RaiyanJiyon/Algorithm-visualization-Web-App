@@ -87,42 +87,72 @@ public class AlgorithmVisualizationLogic {
     }
 
     public static void main(String[] args) {
-        try {
-            System.out.print("Enter the size of the array: ");
-            int size = scanner.nextInt();
+        int attempts = 3;
+        int size = 0;
 
-            int[] array = new int[size];
-            System.out.println("Enter elements for the array:");
+        while (attempts > 0) {
+            try {
+                System.out.print("Enter the size of the array: ");
+                size = scanner.nextInt();
 
-            for (int i = 0; i < size; i++) {
+                if (size <= 0) {
+                    throw new InputMismatchException();
+                }
+
+                break; // If no exception, break out of the loop
+
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a positive integer.");
+                scanner.nextLine(); // Clear the buffer
+                attempts--;
+
+                if (attempts == 0) {
+                    System.out.println("Sorry, your attempts are over. Exiting the program.");
+                    System.exit(0);
+                } else {
+                    System.out.println("You have " + attempts + " attempts remaining.");
+                }
+            }
+        }
+
+        int[] array = new int[size];
+        System.out.println("Enter elements for the array:");
+
+        for (int i = 0; i < size; i++) {
+            attempts = 3; // Reset attempts for each element
+            while (attempts > 0) {
                 try {
                     System.out.print("Element " + (i + 1) + ": ");
                     array[i] = scanner.nextInt();
+                    break; // If no exception, break out of the loop
+
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter an integer.");
                     scanner.nextLine(); // Clear the buffer
-                    i--; // Decrement to re-enter the current element
+                    attempts--;
+
+                    if (attempts == 0) {
+                        System.out.println("Sorry, your attempts are over. Exiting the program.");
+                        System.exit(0);
+                    } else {
+                        System.out.println("You have " + attempts + " attempts remaining.");
+                    }
                 }
             }
-
-            System.out.println("Original Array: " + Arrays.toString(array));
-
-            // Test Quicksort
-            quickSort(array, 0, array.length - 1);
-            System.out.println("After Quicksort: " + Arrays.toString(array));
-
-            // Test Merge Sort
-            int[] array2 = Arrays.copyOf(array, array.length); // Create a copy for Merge Sort
-            mergeSort(array2, 0, array2.length - 1);
-            System.out.println("After Merge Sort: " + Arrays.toString(array2));
-
-            // Test Dijkstra's Algorithm
-            dijkstraAlgorithm(/* Add parameters as needed */);
-
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a valid integer.");
-        } finally {
-            scanner.close(); // Close the scanner to prevent resource leak
         }
+
+        System.out.println("Original Array: " + Arrays.toString(array));
+
+        // Test Quicksort
+        quickSort(array, 0, array.length - 1);
+        System.out.println("After Quicksort: " + Arrays.toString(array));
+
+        // Test Merge Sort
+        int[] array2 = Arrays.copyOf(array, array.length); // Create a copy for Merge Sort
+        mergeSort(array2, 0, array2.length - 1);
+        System.out.println("After Merge Sort: " + Arrays.toString(array2));
+
+        // Test Dijkstra's Algorithm
+       
     }
 }
