@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AlgorithmVisualizationLogic {
@@ -86,29 +87,42 @@ public class AlgorithmVisualizationLogic {
     }
 
     public static void main(String[] args) {
-        System.out.print("Enter the size of the array: ");
-        int size = scanner.nextInt();
+        try {
+            System.out.print("Enter the size of the array: ");
+            int size = scanner.nextInt();
 
-        int[] array = new int[size];
-        System.out.println("Enter elements for the array:");
+            int[] array = new int[size];
+            System.out.println("Enter elements for the array:");
 
-        for (int i = 0; i < size; i++) {
-            System.out.print("Element " + (i + 1) + ": ");
-            array[i] = scanner.nextInt();
+            for (int i = 0; i < size; i++) {
+                try {
+                    System.out.print("Element " + (i + 1) + ": ");
+                    array[i] = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                    scanner.nextLine(); // Clear the buffer
+                    i--; // Decrement to re-enter the current element
+                }
+            }
+
+            System.out.println("Original Array: " + Arrays.toString(array));
+
+            // Test Quicksort
+            quickSort(array, 0, array.length - 1);
+            System.out.println("After Quicksort: " + Arrays.toString(array));
+
+            // Test Merge Sort
+            int[] array2 = Arrays.copyOf(array, array.length); // Create a copy for Merge Sort
+            mergeSort(array2, 0, array2.length - 1);
+            System.out.println("After Merge Sort: " + Arrays.toString(array2));
+
+            // Test Dijkstra's Algorithm
+            dijkstraAlgorithm(/* Add parameters as needed */);
+
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid integer.");
+        } finally {
+            scanner.close(); // Close the scanner to prevent resource leak
         }
-
-        System.out.println("Original Array: " + Arrays.toString(array));
-
-        // Test Quicksort
-        quickSort(array, 0, array.length - 1);
-        System.out.println("After Quicksort: " + Arrays.toString(array));
-
-        // Test Merge Sort
-        int[] array2 = Arrays.copyOf(array, array.length); // Create a copy for Merge Sort
-        mergeSort(array2, 0, array2.length - 1);
-        System.out.println("After Merge Sort: " + Arrays.toString(array2));
-
-        // Test Dijkstra's Algorithm
-        dijkstraAlgorithm(/* Add parameters as needed */);
     }
 }
