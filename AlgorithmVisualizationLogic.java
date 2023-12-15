@@ -6,8 +6,13 @@ public class AlgorithmVisualizationLogic {
 
     private static Scanner scanner = new Scanner(System.in);
 
-    // Quicksort Algorithm
-    public static void quickSort(int[] array, int low, int high) {
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    private static void quickSort(int[] array, int low, int high) {
         if (low < high) {
             int partitionIndex = partition(array, low, high);
             quickSort(array, low, partitionIndex - 1);
@@ -30,8 +35,7 @@ public class AlgorithmVisualizationLogic {
         return i + 1;
     }
 
-    // Merge Sort Algorithm
-    public static void mergeSort(int[] array, int left, int right) {
+    private static void mergeSort(int[] array, int left, int right) {
         if (left < right) {
             int mid = left + (right - left) / 2;
             mergeSort(array, left, mid);
@@ -73,36 +77,81 @@ public class AlgorithmVisualizationLogic {
         }
     }
 
-    // Dijkstra's Algorithm
-    public static void dijkstraAlgorithm(/* Add parameters as needed */) {
-        // Add Dijkstra's algorithm logic here
-        System.out.println("Dijkstra's Algorithm logic will be implemented here.");
-    }
-
-    // Helper method to swap elements in an array
-    private static void swap(int[] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-
     public static void main(String[] args) {
-        int attempts = 3;
-        int size = 0;
+        int size = getSizeFromUser();
 
-        while (attempts > 0) {
+        int[] array = getArrayFromUser(size);
+        System.out.println("Original Array: " + Arrays.toString(array));
+
+        while (true) {
+            int sortChoice = getSortChoiceFromUser();
+            switch (sortChoice) {
+                case 1:
+                    // Quick Sort
+                    quickSort(array, 0, array.length - 1);
+                    System.out.println("After Quick Sort: " + Arrays.toString(array));
+                    break;
+
+                case 2:
+                    // Merge Sort
+                    int[] arrayCopy = Arrays.copyOf(array, array.length);
+                    mergeSort(arrayCopy, 0, arrayCopy.length - 1);
+                    System.out.println("After Merge Sort: " + Arrays.toString(arrayCopy));
+                    break;
+
+                case 3:
+                    // Backtrack and choose array size again
+                    size = getSizeFromUser();
+                    array = getArrayFromUser(size);
+                    System.out.println("Original Array: " + Arrays.toString(array));
+                    break;
+
+                case 4:
+                    // Exit the program
+                    System.out.println("Exiting the program.");
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please enter 1, 2, 3, or 4.");
+            }
+        }
+    }
+
+    private static int getSizeFromUser() {
+        int size = 0;
+        while (true) {
             try {
                 System.out.print("Enter the size of the array: ");
                 size = scanner.nextInt();
-
                 if (size <= 0) {
                     throw new InputMismatchException();
                 }
-
                 break; // If no exception, break out of the loop
-
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a positive integer.");
+                scanner.nextLine(); // Clear the buffer
+            }
+        }
+        return size;
+    }
+
+    private static int[] getArrayFromUser(int size) {
+        int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = getElementFromUser(i + 1);
+        }
+        return array;
+    }
+
+    private static int getElementFromUser(int index) {
+        int attempts = 3;
+        while (attempts > 0) {
+            try {
+                System.out.print("Element " + index + ": ");
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
                 scanner.nextLine(); // Clear the buffer
                 attempts--;
 
@@ -114,45 +163,24 @@ public class AlgorithmVisualizationLogic {
                 }
             }
         }
+        return 0; // This line should not be reached
+    }
 
-        int[] array = new int[size];
-        System.out.println("Enter elements for the array:");
+    private static int getSortChoiceFromUser() {
+        while (true) {
+            System.out.println("Choose a sorting algorithm:");
+            System.out.println("1. Quick Sort");
+            System.out.println("2. Merge Sort");
+            System.out.println("3. Backtrack and choose array size again");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice (1, 2, 3, or 4): ");
 
-        for (int i = 0; i < size; i++) {
-            attempts = 3; // Reset attempts for each element
-            while (attempts > 0) {
-                try {
-                    System.out.print("Element " + (i + 1) + ": ");
-                    array[i] = scanner.nextInt();
-                    break; // If no exception, break out of the loop
-
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter an integer.");
-                    scanner.nextLine(); // Clear the buffer
-                    attempts--;
-
-                    if (attempts == 0) {
-                        System.out.println("Sorry, your attempts are over. Exiting the program.");
-                        System.exit(0);
-                    } else {
-                        System.out.println("You have " + attempts + " attempts remaining.");
-                    }
-                }
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear the buffer
             }
         }
-
-        System.out.println("Original Array: " + Arrays.toString(array));
-
-        // Test Quicksort
-        quickSort(array, 0, array.length - 1);
-        System.out.println("After Quicksort: " + Arrays.toString(array));
-
-        // Test Merge Sort
-        int[] array2 = Arrays.copyOf(array, array.length); // Create a copy for Merge Sort
-        mergeSort(array2, 0, array2.length - 1);
-        System.out.println("After Merge Sort: " + Arrays.toString(array2));
-
-        // Test Dijkstra's Algorithm
-       
     }
 }
